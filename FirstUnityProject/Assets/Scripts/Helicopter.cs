@@ -8,7 +8,7 @@ public class Helicopter : MonoBehaviour
     public float upForce = 100f;
     public float rotationForce = 100f;
     private Rigidbody rigidBody;
-    
+
     // Start is called before the first frame update
     void Start()
     {
