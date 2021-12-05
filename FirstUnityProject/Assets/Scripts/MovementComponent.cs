@@ -6,6 +6,10 @@ using UnityEngine;
 public class  MovementComponent: MonoBehaviour
 {
     public float movementSpeed = 0.5f;
+
+    private Animator characterAnimator;
+
+    public CharacterController Controller;
     // Start is called before the first frame update
     void Start()
     {
@@ -14,36 +18,57 @@ public class  MovementComponent: MonoBehaviour
 
     private void Awake()
     {
-        
+        characterAnimator = GetComponent<Animator>();
     }
 
-    private void FixedUpdate()
+    private void Update()
     {
+        Vector3 movementDirection = Vector3.zero;
         
-    }
+        if (Input.GetKeyUp(KeyCode.W) || Input.GetKeyUp(KeyCode.S))
+        {
+            characterAnimator.SetFloat("VelocityY", 0);
+            movementSpeed = 0;
+        }
+        
+        if (Input.GetKeyUp(KeyCode.D) || Input.GetKeyUp(KeyCode.A))
+        {
+            characterAnimator.SetFloat("VelocityX", 0);
+        }
 
-    // Update is called once per frame
-    void Update()
-    {
-        //frame başlangıcı
         if (Input.GetKey(KeyCode.W))
         {
-            transform.Translate(Vector3.forward * movementSpeed * Time.deltaTime);
+            movementSpeed = 5;
+            characterAnimator.SetFloat("VelocityY", 5);
+            movementDirection += transform.forward;
         }
-        //movementSpeed = 3
         
-        //(0, 0, 1) * movementSpeed = (0, 0, 3)
-        //(0, 0, movementSpeed) = (0, 0, 3)
+        if (Input.GetKey(KeyCode.S))
+        {
+            movementSpeed = 5;
+            characterAnimator.SetFloat("VelocityY", -5);
+            movementDirection += -transform.forward;
+        }
         
         if (Input.GetKey(KeyCode.D))
         {
-            transform.Translate(new Vector3(movementSpeed * Time.deltaTime, 0, 0));
+            movementSpeed = 5;
+            characterAnimator.SetFloat("VelocityX", 5);
+            movementDirection += transform.right;
         }
         
         if (Input.GetKey(KeyCode.A))
         {
-            transform.Translate(new Vector3(-movementSpeed * Time.deltaTime, 0, 0));
+            movementSpeed = 5;
+            characterAnimator.SetFloat("VelocityX", -5);
+            movementDirection += -transform.right;
         }
-        //frame bitişi
+
+        Controller.Move(movementDirection * movementSpeed * Time.deltaTime);
+
+        if (Input.GetKeyUp(KeyCode.Space))
+        {
+            characterAnimator.SetTrigger("Jump");
+        }
     }
 }
