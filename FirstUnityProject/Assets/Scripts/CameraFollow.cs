@@ -6,20 +6,18 @@ public class CameraFollow : MonoBehaviour
 {
     public Transform characterToFollow;
 
-    public float followDistance = 10f;
+    public float followDistance = 5f;
+    public float followHeight = 5f;
 
     public float smoothness = .1f;
+    
     // Update is called once per frame
     void Update()
     {
-        Vector3 followTargetPosition = characterToFollow.position + -characterToFollow.forward * followDistance;
-        followTargetPosition.y = 4.5f;
-        if (Vector3.Distance(characterToFollow.position, transform.position) > followDistance)
-        {
-            transform.position = Vector3.Lerp(transform.position, followTargetPosition, smoothness);
-        }
-
+        Vector3 lookDir = (characterToFollow.position - transform.position).normalized;
+        transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.LookRotation(lookDir), smoothness);
         
-        transform.LookAt(characterToFollow.TransformPoint(characterToFollow.forward));
+        Vector3 followPoint = characterToFollow.TransformPoint(0, followHeight, followDistance);
+        transform.position = Vector3.Lerp(transform.position, followPoint, smoothness);
     }
 }

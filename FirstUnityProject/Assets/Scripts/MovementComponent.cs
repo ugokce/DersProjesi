@@ -6,6 +6,7 @@ using UnityEngine;
 public class  MovementComponent: MonoBehaviour
 {
     public float movementSpeed = 0.5f;
+    public float rotationSpeed = 10f;
 
     private Animator characterAnimator;
 
@@ -19,6 +20,11 @@ public class  MovementComponent: MonoBehaviour
     private void Awake()
     {
         characterAnimator = GetComponent<Animator>();
+    }
+
+    private void FixedUpdate()
+    {
+        Turn();
     }
 
     private void Update()
@@ -70,5 +76,11 @@ public class  MovementComponent: MonoBehaviour
         {
             characterAnimator.SetTrigger("Jump");
         }
+    }
+
+    private void Turn()
+    {
+        float mouseAcc = Mathf.Clamp(Input.GetAxis("Mouse X"), -1f, 1f);
+        transform.Rotate(Vector3.up, mouseAcc * rotationSpeed);
     }
 }
